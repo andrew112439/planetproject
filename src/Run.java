@@ -6,6 +6,13 @@ import javax.swing.JPanel;
 
 public class Run {
 
+	/*
+	 * CREATE GAME MODES:
+	 * 		EASY: CURRENT SETTING
+	 * 		MEDIUM: ASTEROIDS ARE MORE COMMON, ROBOTS COST MORE, GAME IS FAST
+	 * 		HARD: ASTEROIDS AND INVADERS ARE VERY COMMON, ROBOTS COST MORE, GAME IS VERY FAST
+	 */
+	
 	private static boolean running = false;
 	
 	private static JButton save;
@@ -43,7 +50,7 @@ public class Run {
 		save = new JButton("Save");
 		save.addActionListener(new Click());
 		p.add(save);
-		transport = new JButton("Transport");
+		transport = new JButton("Collector");
 		transport.addActionListener(new Click());
 		p.add(transport);
 		hospitals = new JButton("Hospital");
@@ -99,7 +106,7 @@ public class Run {
 				Random r = new Random();
 				m.addEnergy(5);
 				m.addMaterials(5);
-				m.addSick(r.nextInt(100)); //make this based on the number of transportationmoduless purchased
+				m.addSick(r.nextInt(100));
 				
 				int addAsteroid = r.nextInt(50);
 				if(addAsteroid <= 5 && m.getAsteroidList().size() == 0){

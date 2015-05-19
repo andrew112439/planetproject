@@ -179,7 +179,7 @@ public class Main extends JPanel{
 	}
 
 	public int getTransport() {
-		return transport;
+		return transmods.size();
 	}
 
 	public void setTransport(int transport) {
