@@ -58,13 +58,14 @@ public class Run {
 		hospitals = new JButton("Hospital");
 		hospitals.addActionListener(new Click());
 		p.add(hospitals);
-		mine = new JButton("Mine");
+		mine = new JButton("Miner");
 		mine.addActionListener(new Click());
 		p.add(mine);
 		
 		shield = new JButton("Launch Shield");
 		shield.addActionListener(new Click());
 		p.add(shield);
+		controls.setResizable(false);
 		controls.setVisible(true);
 
 		JFrame f = new JFrame();
@@ -187,5 +188,4 @@ public class Run {
 	public static int getCounter(){
 		return counter;
 	}
-	
 }
