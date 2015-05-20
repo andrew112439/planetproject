@@ -1,192 +1,281 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Run {
+public class Main extends JPanel{
 
-	/*
-	 * CREATE GAME MODES:
-	 * 		EASY: CURRENT SETTING
-	 * 		MEDIUM: ASTEROIDS ARE MORE COMMON, ROBOTS COST MORE, GAME IS FAST
-	 * 		HARD: ASTEROIDS AND INVADERS ARE VERY COMMON, ROBOTS COST MORE, GAME IS VERY FAST
-	 */
+	//STATS:
+	private int mines;
+	private int hospitals;
+	private int transport;
+	private int money;
 	
-	private static boolean running = false;
+	private int materials;
+	private int energy;
+	private int sick;
 	
-	private static JButton save;
+	private boolean shield;
 	
-	private static JButton wind;
-	private static JButton hydro;
-	private static JButton transport;
-	private static JButton hospitals;
-	private static JButton mine;
+	private boolean loadedFromFile = false;
 	
-	private static JButton shield;
-	
-	private static Main m;
-	
-	private static int counter = 0;
-	
-	private static int shieldCounter = 0;
-	
-	private static Random rand = new Random();
-	
-	public static void main(String args[]) throws InterruptedException{
-		running = true;
-		
-		m = new Main();
-		Planet.setup();
-		
-		//CONTROL PANEL
-		JFrame controls = new JFrame();
-		controls.setTitle("Menu");
-		controls.setSize(160, 200);
-		controls.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		
-		JPanel p = new JPanel();
-		controls.add(p);
-		
-		//BUTTON ADDING
-		save = new JButton("Save");
-		save.addActionListener(new Click());
-		p.add(save);
-		transport = new JButton("Collector");
-		transport.addActionListener(new Click());
-		p.add(transport);
-		hospitals = new JButton("Hospital");
-		hospitals.addActionListener(new Click());
-		p.add(hospitals);
-		mine = new JButton("Miner");
-		mine.addActionListener(new Click());
-		p.add(mine);
-		
-		shield = new JButton("Launch Shield");
-		shield.addActionListener(new Click());
-		p.add(shield);
-		controls.setResizable(false);
-		controls.setVisible(true);
+	private static final long serialVersionUID = 4131017062673607884L;
 
-		JFrame f = new JFrame();
-		f.setTitle("Materials: " + m.getMaterials() + 
-				" | Energy: " + m.getEnergy() + 
-				" | Sick: " + m.getSick() + " | Collectors: " + m.getTransport()
-				+ " | Miners: " + m.getMines() + " | Ambulances: " + m.getHospitals());
-		f.setSize(700, 700);
-		f.setDefaultCloseOperation(3);
-		f.setResizable(false);
-		f.setFocusable(true);
-		f.setLocationRelativeTo(null);
-		Menu t = new Menu();
-		
-		f.add(t);
-		f.setVisible(true); 
-		//THREE TO FIVE LOADING PHRASES
-		
-		int numPhrases = rand.nextInt()+3;
-		
-		Thread.sleep(5000);
-		f.remove(t);
-		//f.setVisible(false); 
-		f.add(m);
-		f.setVisible(true); 
+	private int[][] starArray;
+	
+	private Random r = new Random();
+	
+	private ArrayList<TransportModule> transmods = new ArrayList<TransportModule>();
+	
+	private ArrayList<Invader> invaders = new ArrayList<Invader>();
+	private boolean invader;
+	private Invader i = new Invader();
+	
+	private ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
+	private boolean asteroid;
+	private Asteroid a = new Asteroid();
 
-		while(running){
-			if(m.getShield()){
-				shieldCounter++;
-				if(shieldCounter % 100 == 0){
-					m.shield(false);
+	private ArrayList<Particle> particles = new ArrayList<Particle>();
+	private boolean particle;
+	private Particle p;
+	
+	public Main(){
+		if(!loadedFromFile){
+			sick = 100;
+			materials = 100;
+			energy = 100;
+			setMines(0);
+			setHospitals(0);
+			setTransport(0);
+			setMoney(0);
+		}
+		genStars();
+	}
+	
+	public void paint(Graphics g){
+		paintStars(g);
+		paintPlanet(g);
+			for(int i = 0; i < transmods.size(); i++){
+				if(transmods.get(i) instanceof Ambulance){
+					if(sick > 100){
+						transmods.get(i).paint(g);
+						transmods.get(i).move();
+					}
+				}else{
+					transmods.get(i).paint(g);
+					transmods.get(i).move();
 				}
 			}
-			if(m.getSick() <= 0){
-				m.setSick(10);
+		if(invader){
+			i.paint(g);
+			i.move(g);
+		}
+		if(invaders.size()!=0){
+			invaders.get(0).paint(g);
+			invaders.get(0).move(g);
+			if(!invaders.get(0).isInBounds()){
+				invaders.remove(0);
 			}
-			if(m.getSick() < 100){
-				f.setTitle("YOU WIN!");
-				running = false;
-				break;
+		}
+		if(asteroid){
+			a.paint(g);
+			a.move();
+		}
+		if(asteroids.size()!=0){
+			asteroids.get(0).paint(g);
+			asteroids.get(0).move();
+			if(!asteroids.get(0).inBounds()){
+				asteroids.remove(0);
 			}
-			if(m.getSick() >= 2000){
-				f.setTitle("GAME OVER | GAME OVER | GAME OVER | GAME OVER  | GAME OVER ");
-				running = false;
-				break;
+		}
+		if(particle){
+			if(particles.size() == 0){
+				p = new Particle(invaders.get(0).getY(), invaders.get(0).getUp(), invaders.get(0).getParticleColor());
+				p.paint(g);
+				p.move();
+				particles.add(p);
 			}
-			f.setTitle("Materials: " + m.getMaterials() + 
-					" | Energy: " + m.getEnergy() + 
-					" | Sick: " + m.getSick() + " | Collectors: " + m.getTransport()
-					+ " | Miners: " + m.getMines() + " | Ambulances: " + m.getHospitals());
-			if(counter % 1000 == 0){
-				Random r = new Random();
-				m.addEnergy(5);
-				m.addMaterials(5);
-				m.addSick(r.nextInt(100));
-				
-				int addAsteroid = r.nextInt(50);
-				if(addAsteroid <= 5 && m.getAsteroidList().size() == 0){
-					m.addAsteroid(new Asteroid());
+			System.out.println(p.getY());
+		}
+		if(particles.size() != 0){
+			particles.get(0).paint(g);
+			particles.get(0).move();
+			if(!particles.get(0).inBounds()){
+				addSick(r.nextInt(20)+5);
+				particles.remove(0);
+				particle = false;
+			}
+		}
+	}
+
+	private void genStars(){
+		int[][] stars = new int[70][70];
+		for(int i = 0; i < stars.length; i++){
+			for(int j = 0; j < stars[i].length; j++){
+				if(r.nextInt(99) >= 90){
+					stars[i][j] = 0;
+				}else{
+					stars[i][j] = 1;
 				}
-				
-				int invader = r.nextInt(50);
-				if(invader <= 10 && m.getInvaderList().size() == 0){
-					m.addInvader(new Invader());
+			}
+		}
+		starArray = stars;
+	}
+	
+	private void paintStars(Graphics g){
+		for (int i = 0; i < starArray.length; i++){
+			for (int j = 0; j < starArray[i].length; j++){
+				if(starArray[i][j] == 1){
+					g.setColor(new Color(3355443));
+				}else{
+					g.setColor(new Color(0xFFCC99));
 				}
+				g.fillRect(i*10, j*10, 10, 10);
 			}
-			if(counter % 500 == 0){
-				m.addSick(5);
-			}
-			Thread.sleep(5);
-			f.repaint();
-			counter++;
 		}
 	}
 	
-	public static JButton getSaveButton(){
-		return save;
+	private void paintPlanet(Graphics g){
+		int offset = 190;
+		
+		int[][] arr = Planet.getPlanetArray();
+		
+		for(int r = 0; r < arr.length; r++){
+			for(int c = 0; c < arr[r].length; c++){
+				if(arr[r][c] != 0){
+					if(arr[r][c] == 1){
+						g.setColor(Color.black);
+					}else if(arr[r][c] == 2){
+						g.setColor(Planet.getPrimary());
+					}else{
+						g.setColor(Planet.getSecondary());
+					}
+					g.fillRect((r * 16)+offset, (c * 16)+offset-10, 16, 16);
+				}
+			}
+		}
 	}
 	
-	public static JButton getWind(){
-		return wind;
+	public void addMine(){
+		setMines(getMines() + 1);
 	}
-	
-	public static JButton getHydro(){
-		return hydro;
+
+	public int getMines() {
+		return mines;
 	}
-	
-	public static JButton getTransport(){
-		return transport;
+
+	public void setMines(int mines) {
+		this.mines = mines;
 	}
-	
-	public static JButton getHospital(){
+
+	public int getHospitals() {
 		return hospitals;
 	}
-	
-	public static JButton getMine(){
-		return mine;
+
+	public void setHospitals(int hospitals) {
+		this.hospitals = hospitals;
+	}
+
+	public int getTransport() {
+		return transmods.size();
+	}
+
+	public void setTransport(int transport) {
+		this.transport = transport;
 	}
 	
-	public static Main getMain(){
-		return m;
+	public void setEnergy(int energy){
+		this.energy = energy;
 	}
 	
-	public static void addEnergy(int n){
-		m.addEnergy(n);
+	public int getEnergy(){
+		return energy;
 	}
 	
-	public static void addMaterials(int n){
-		m.addMaterials(n);
+	public int getMaterials(){
+		return materials;
 	}
 	
-	public static void addSick(int n){
-		m.addSick(n);
+	public void setMaterials(int materials){
+		this.materials = materials;
 	}
 	
-	public static JButton getShieldButton(){
+	public void addEnergy(int add){
+		energy+=add;
+	}
+	
+	public void addMaterials(int add){
+		materials+=add;
+	}
+	
+	public void addSick(int add){
+		sick+=add;
+		if(sick < 0){
+			sick = 0;
+		}
+	}
+	
+	public void setSick(int sick){
+		this.sick = sick;
+	}
+	
+	public int getSick(){
+		return sick;
+	}
+	
+	public void setMoney(int money){
+		this.money = money;
+	}
+	
+	public int getMoney(){
+		return money;
+	}
+	
+	public void addTransportModule(String type){
+		if(type.equals("collector")){
+			transmods.add(new Collector());
+		}else if(type.equals("miner")){
+			transmods.add(new Miner());
+		}else if(type.equals("ambulance")){
+			transmods.add(new Ambulance());
+		}
+	}
+	
+	public void shield(boolean s){
+		shield = s;
+	}
+	
+	public boolean getShield(){
 		return shield;
 	}
 	
-	public static int getCounter(){
-		return counter;
+	public void addAsteroid(Asteroid a){
+		asteroids.add(a);
 	}
 	
+	public void setAsteroid(boolean a){
+		asteroid = a;
+	}
+	
+	public ArrayList<Asteroid> getAsteroidList(){
+		return asteroids;
+	}
+	
+	public ArrayList<Invader> getInvaderList(){
+		return invaders;
+	}
+	
+	public void addInvader(Invader i){
+		invaders.add(i);
+	}
+	
+	public ArrayList<Particle> getParticleList(){
+		return particles;
+	}
+	
+	public void particle(){
+		particle = !particle;
+	}
 }
