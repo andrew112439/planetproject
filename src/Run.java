@@ -31,6 +31,8 @@ public class Run {
 	
 	private static int shieldCounter = 0;
 	
+	private static Random rand = new Random();
+	
 	public static void main(String args[]) throws InterruptedException{
 		running = true;
 		
@@ -75,9 +77,20 @@ public class Run {
 		f.setResizable(false);
 		f.setFocusable(true);
 		f.setLocationRelativeTo(null);
+		Menu t = new Menu();
+		
+		f.add(t);
+		f.setVisible(true); 
+		//THREE TO FIVE LOADING PHRASES
+		
+		int numPhrases = rand.nextInt()+3;
+		
+		Thread.sleep(5000);
+		f.remove(t);
+		//f.setVisible(false); 
 		f.add(m);
 		f.setVisible(true); 
-		
+
 		while(running){
 			if(m.getShield()){
 				shieldCounter++;
