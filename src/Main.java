@@ -10,16 +10,26 @@ public class Main extends JPanel{
 	//STATS:
 	private int mines;
 	private int hospitals;
-	private int transport;
 	private int money;
+	private int collectors;
+	private int buses;
+	
+	private int population = 2000;
 	
 	private int materials;
 	private int energy;
+	
 	private int sick;
+	private int bub;
+	private boolean bubExists;
+	private int yel;
+	private boolean yelExists;
+	private int pox;
+	private boolean poxExists;
+	private int mal;
+	private boolean malExists;
 	
 	private boolean shield;
-	
-	private boolean loadedFromFile = false;
 	
 	private static final long serialVersionUID = 4131017062673607884L;
 
@@ -42,36 +52,54 @@ public class Main extends JPanel{
 	private Particle p;
 	
 	public Main(){
-		if(!loadedFromFile){
-			sick = 100;
-			materials = 100;
-			energy = 100;
-			setMines(0);
-			setHospitals(0);
-			setTransport(0);
-			setMoney(0);
-		}
+		/*yel = 1;
+		bub = 1;
+		mal = 1;
+		pox = 1;*/
+		
+		buses = 0;
+		collectors = 0;
+		sick = 100;
+		materials = 100;
+		energy = 100;
+		setMines(0);
+		setHospitals(0);
+		setTransport(0);
+		setMoney(0);
 		genStars();
 	}
 	
 	public void paint(Graphics g){
-		paintStars(g);
-		paintPlanet(g);
-			for(int i = 0; i < transmods.size(); i++){
-				if(transmods.get(i) instanceof Ambulance){
-					if(sick > 100){
-						transmods.get(i).paint(g);
-						transmods.get(i).move();
-					}
-				}else{
-					transmods.get(i).paint(g);
-					transmods.get(i).move();
-				}
+		if(bub < 0){
+			bub = 0;
+		}
+		if(yel < 0){
+			yel = 0;
+		}
+		if(pox < 0){
+			pox = 0;
+		}
+		if(mal < 0){
+			mal = 0;
+		}
+		//checks to see if there is a patient zero yet
+		bubExists = !(bub == 0);
+		yelExists = !(yel == 0);
+		poxExists = !(pox == 0);
+		malExists = !(mal == 0);
+		
+		paintStars(g); //paints starry background
+		paintPlanet(g); //paints the main planet
+			for(int i = 0; i < transmods.size(); i++){ //paints the drones
+				transmods.get(i).paint(g);
+				transmods.get(i).move();
 			}
-		if(invader){
+		//paints the invader if an invader exists
+		if(invader){ 
 			i.paint(g);
 			i.move(g);
 		}
+		//determines if invader should continue to be painted
 		if(invaders.size()!=0){
 			invaders.get(0).paint(g);
 			invaders.get(0).move(g);
@@ -79,10 +107,12 @@ public class Main extends JPanel{
 				invaders.remove(0);
 			}
 		}
+		//paints an asteroid if an asteroid exists
 		if(asteroid){
 			a.paint(g);
 			a.move();
 		}
+		//determines if asteroid should continue to be painted
 		if(asteroids.size()!=0){
 			asteroids.get(0).paint(g);
 			asteroids.get(0).move();
@@ -90,6 +120,7 @@ public class Main extends JPanel{
 				asteroids.remove(0);
 			}
 		}
+		//paints a particle and checks if the particle should continue to be painted
 		if(particle){
 			if(particles.size() == 0){
 				p = new Particle(invaders.get(0).getY(), invaders.get(0).getUp(), invaders.get(0).getParticleColor());
@@ -97,19 +128,31 @@ public class Main extends JPanel{
 				p.move();
 				particles.add(p);
 			}
-			System.out.println(p.getY());
 		}
+		//adds sickness when particle collides with planet
 		if(particles.size() != 0){
+			particles.get(0).setInvader(i);
 			particles.get(0).paint(g);
 			particles.get(0).move();
 			if(!particles.get(0).inBounds()){
-				addSick(r.nextInt(20)+5);
+				//addSick(r.nextInt(20)+5);
+				String type = particles.get(0).getInvader().getDiseaseType();
+				if(type.equals("bub")){
+					addBubonic(r.nextInt(20)+10);
+				}else if(type.equals("pox")){
+					addPox(r.nextInt(20)+10);
+				}else if(type.equals("yel")){
+					addFever(r.nextInt(20)+10);
+				}else{
+					addMalaria(r.nextInt(20)+10);
+				}
 				particles.remove(0);
 				particle = false;
 			}
 		}
 	}
 
+	//generates starry background
 	private void genStars(){
 		int[][] stars = new int[70][70];
 		for(int i = 0; i < stars.length; i++){
@@ -124,6 +167,7 @@ public class Main extends JPanel{
 		starArray = stars;
 	}
 	
+	//paints starry background
 	private void paintStars(Graphics g){
 		for (int i = 0; i < starArray.length; i++){
 			for (int j = 0; j < starArray[i].length; j++){
@@ -137,6 +181,7 @@ public class Main extends JPanel{
 		}
 	}
 	
+	//paints planet
 	private void paintPlanet(Graphics g){
 		int offset = 190;
 		
@@ -181,9 +226,13 @@ public class Main extends JPanel{
 	public int getTransport() {
 		return transmods.size();
 	}
+	
+	public int getCollectors(){
+		return collectors;
+	}
 
 	public void setTransport(int transport) {
-		this.transport = transport;
+		//this.transport = transport;
 	}
 	
 	public void setEnergy(int energy){
@@ -217,12 +266,34 @@ public class Main extends JPanel{
 		}
 	}
 	
-	public void setSick(int sick){
-		this.sick = sick;
+	public void addMalaria(int sick){
+		mal+=sick;
+	}
+	public void addPox(int sick){
+		pox+=sick;
+	}
+	public void addBubonic(int sick){
+		bub+=sick;
+	}
+	public void addFever(int sick){
+		yel+=sick;
+	}
+	
+	public int getMal(){
+		return mal;
+	}
+	public int getPox(){
+		return pox;
+	}
+	public int getBub(){
+		return bub;
+	}
+	public int getYel(){
+		return yel;
 	}
 	
 	public int getSick(){
-		return sick;
+		return yel+mal+pox+bub+sick;
 	}
 	
 	public void setMoney(int money){
@@ -233,14 +304,20 @@ public class Main extends JPanel{
 		return money;
 	}
 	
+	//method for adding nonhospitals
 	public void addTransportModule(String type){
 		if(type.equals("collector")){
 			transmods.add(new Collector());
 		}else if(type.equals("miner")){
 			transmods.add(new Miner());
-		}else if(type.equals("ambulance")){
-			transmods.add(new Ambulance());
+		}else if(type.equals("bus")){
+			transmods.add(new Bus());
 		}
+	}
+	
+	//adds hospitals according to type (disease type)
+	public void addAmbulance(String type){
+		transmods.add(new Ambulance(type));
 	}
 	
 	public void shield(boolean s){
@@ -277,5 +354,41 @@ public class Main extends JPanel{
 	
 	public void particle(){
 		particle = !particle;
+	}
+	
+	public int getPopulation(){
+		return population;
+	}
+	
+	public void addPopulation(int n){
+		population += n;
+	}
+	
+	public void addCollector(){
+		collectors++;
+	}
+	
+	public void addBus(){
+		buses++;
+	}
+	
+	public int getBuses(){
+		return buses;
+	}
+
+	public boolean bubExists(){
+		return bubExists;
+	}
+	
+	public boolean yelExists(){
+		return yelExists;
+	}
+	
+	public boolean poxExists(){
+		return poxExists;
+	}
+	
+	public boolean malExists(){
+		return malExists;
 	}
 }

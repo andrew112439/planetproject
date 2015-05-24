@@ -1,16 +1,10 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 public class LetterList {
 
 	private static ArrayList<Letter> letters;
-	private static ArrayList<String> loadingPhrases;
-	
-	public static String getLoadingPhrase(){
-		Random r = new Random();
-		return loadingPhrases.get(r.nextInt(loadingPhrases.size()));
-	}
-	
+
+	//RETURNS THE ARRAY VALUE OF A SPECIFIC LETTER
 	public static int[][] search(String find){
 		for(int i = 0; i < letters.size(); i++){
 			if(find.equals(letters.get(i).getLetter())){
@@ -21,8 +15,8 @@ public class LetterList {
 	}
 	
 	public static void setup(){
+		//CREATES THE ARRAY VALUES FOR ALL 26 LETTERS
 		letters = new ArrayList<Letter>();
-		loadingPhrases = new ArrayList<String>();
 		
 		int[][] a = {
 				{1,1,1,1},
@@ -257,17 +251,6 @@ public class LetterList {
 				{1,1,1,1}
 		};
 		letters.add(new Letter("Z", z));
-		
-		loadingPhrases.add("CREATING STAR DUST");
-		loadingPhrases.add("GENERATING ASTEROID PARTICLES");
-		loadingPhrases.add("DISCOVERING HIGGS BOSON");
-		loadingPhrases.add("ADJUSTING GRAVITY");
-		loadingPhrases.add("CREATING HADRON COLLIDER");
-		loadingPhrases.add("PUTTING ATOMS BACK TOGETHER");
-		loadingPhrases.add("GENERATING ALIEN INVADERS");
-		loadingPhrases.add("CREATING ENERGY");
-		loadingPhrases.add("CREATING MATERIALS");
-		loadingPhrases.add("GENERATING STARS");
 	}
 	
 }

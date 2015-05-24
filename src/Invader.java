@@ -16,24 +16,29 @@ public class Invader {
 	private Color color;
 	private Color particleColor;
 	
+	private String diseaseType;
+	
 	public Invader(){
-		boolean top = rand.nextBoolean();
-		if(top){
+		boolean top = rand.nextBoolean(); //DETERMINES IF THE INVADER ATTACKS FROM ABOVE OR BELOW
+		if(top){ //PLACES THE INVADER AT THE CORRECT POSITION
 			yOffset = 50;
 		}else{
 			yOffset = 550;
 		}
-		left = rand.nextBoolean();
-		if(left){
+		left = rand.nextBoolean(); //DETERMINES IF THE INVADER IS COMING FROM THE LEFT OR THE RIGHT
+		if(left){ //PLACES THE INVADER AT THE CORRECT POSITION
 			offset = 700;
 		}else{
 			offset = -80;
 		}
 		genParticleColor();
 		makeArr();
+		genDiseaseType();
 	}
 	
+	//PAINTS THE INVADER AT THE CORRECT POSITION
 	public void paint(Graphics g){
+		//TRAVERSES THROUGH THE ARRAY BY WHICH THE INVADER IS REPRESENTED 
 		for(int r = 0; r < arr.length; r++){
 			for(int c = 0; c < arr[r].length; c++){
 				if(arr[r][c] == 1){
@@ -48,6 +53,7 @@ public class Invader {
 		}
 	}
 	
+	//INITIALIZES THE ARRAY BY WHICH THE INVADER IS REPRESENTED
 	private void makeArr(){
 		int[][] a = {
 				{1,0,0,0,1},
@@ -59,6 +65,7 @@ public class Invader {
 		arr = a;
 	}
 	
+	//DETERMINES THE COLOR OF THE INVADER AND THE PARTICLE THAT IT SHOOTS
 	private void genParticleColor(){
 		Color[] colors = 
 			{new Color(0xD4A017), new Color(0xEDDA74), new Color(0xF87A17), 
@@ -76,17 +83,32 @@ public class Invader {
 		if(offset == 324){
 			//LAUNCH PARTICLE
 			Run.getMain().particle();
-			if(left){
+			if(left){ //MOVE THE PARTICLE
 				offset-=2;
 			}else{
 				offset+=2;
 			}
 		}else{
-			if(left){
+			if(left){ //MOVE THE PARTICLE
 				offset-=2;
 			}else{
 				offset+=2;
 			}
+		}
+	}
+	
+	//DETERMINES TO WHICH DISEASE THE INVADER WILL CONTRIBUTE TO
+	public void genDiseaseType(){
+		int t = rand.nextInt(5);
+		System.out.println(t);
+		if(t == 0){
+			diseaseType = "bub";
+		}else if(t == 1){
+			diseaseType = "pox";
+		}else if(t == 2){
+			diseaseType = "yel";
+		}else{
+			diseaseType = "mal";
 		}
 	}
 	
@@ -100,22 +122,43 @@ public class Invader {
 		}
 		if(left){
 			if(offset <= 350){
-				Run.getMain().addSick(rand.nextInt(250));
+				//CONTRIBUTES TO THE DISEASE IT WAS ASSIGNED TO
+				if(diseaseType.equals("bub")){
+					System.out.println("bub+=");
+					Run.getMain().addBubonic(rand.nextInt(250));
+				}else if(diseaseType.equals("pox")){
+					System.out.println("pox+=");
+					Run.getMain().addPox(rand.nextInt(250));
+				}else if(diseaseType.equals("yel")){
+					System.out.println("yel+=");
+					Run.getMain().addFever(rand.nextInt(250));
+				}else{
+					System.out.println("mal+=");
+					Run.getMain().addMalaria(rand.nextInt(250));
+				}	
 			}
 			return offset >= 350;
 		}else{
-			if(offset >= 350){
-				Run.getMain().addSick(rand.nextInt(250));
+			//CONTRIBUTES TO THE DISEASE IT WAS ASSIGNED TO
+			if(diseaseType.equals("bub")){
+				Run.getMain().addBubonic(rand.nextInt(250));
+			}else if(diseaseType.equals("pox")){
+				Run.getMain().addPox(rand.nextInt(250));
+			}else if(diseaseType.equals("yel")){
+				Run.getMain().addFever(rand.nextInt(250));
+			}else{
+				Run.getMain().addMalaria(rand.nextInt(250));
 			}
 			return offset <= 350;
 		}
 	}
 	
-	//Particle temp = new Particle(yOffset, up, particleColor);
+	//RETURNS THE Y POSITION OF THE INVADER
 	public int getY(){
 		return yOffset;
 	}
 	
+	//FOR THE PURPOSE OF THE MOVEMENT OF A PARTICLE: RETURNS IF THE INVADER IS ABOVE OR BELOW THE PLANET
 	public boolean getUp(){
 		if(yOffset == 50){
 			return false;
@@ -124,7 +167,12 @@ public class Invader {
 		}
 	}
 	
+	//FOR THE PURPOSE OF THE PARTICLE: RETURNS COLOR OF PARTICLE
 	public Color getParticleColor(){
 		return particleColor;
+	}
+	
+	public String getDiseaseType(){
+		return diseaseType;
 	}
 }

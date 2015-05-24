@@ -3,6 +3,8 @@ import java.util.Random;
 
 public class Planet {
 
+	//THIS CLASS IS THE PLANET IN THE CENTER OF THE SCREEN
+	
 	//PICKED FROM A SERIES OF COLORS, SAME COLOR CAN'T BE PICKED TWICE
 	private static Color primary;
 	private static Color secondary;
@@ -16,6 +18,7 @@ public class Planet {
 		genColors();
 	}
 
+	//SETS UP THE ARRAY FOR THE MAIN PLANET
 	private static void genArray(){
 		int[][] p = {
 				{0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
@@ -53,6 +56,7 @@ public class Planet {
 		planetArray = p;
 	}
 	
+	//DETERMINES THE PRIMARY AND SECONDARY COLORS OF THE PLANET
 	private static void genColors(){
 		Color[] colors = 
 			{new Color(0xD4A017), new Color(0xEDDA74), new Color(0xF87A17), 
@@ -83,8 +87,7 @@ public class Planet {
 	public static int[][] getPlanetArray(){
 		return planetArray;
 	}
-	
-	//FOR THE PURPOSES OF LOADING FROM A SAVE FILE
+
 	public static void setPrimary(Color c){
 		primary = c;
 	}
