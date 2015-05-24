@@ -3,6 +3,8 @@ import java.awt.Graphics;
 
 public class Ambulance extends Collector{
 
+	//REPRESENTS ALL AMBULANCES
+	
 	private String type;
 	
 	public Ambulance(String t){
