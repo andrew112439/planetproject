@@ -91,6 +91,13 @@ class Click implements ActionListener{
 				Run.getMain().addMaterials(-25);
 			}
 		}
+		//DETERIMING THE DIFFICULTY OF THE GAME
+		else if(e.getSource() == Run.getEasy()){
+		    Run.setDifficulty(1);
+		}else if(e.getSource() == Run.getMedium()){
+		    Run.setDifficulty(2);
+		}else if(e.getSource() == Run.getHard()){
+		    Run.setDifficulty(3);
+	    }
 	}
-			
 }
