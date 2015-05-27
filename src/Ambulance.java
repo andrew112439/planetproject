@@ -5,6 +5,8 @@ public class Ambulance extends Collector{
 
 	//REPRESENTS ALL AMBULANCES
 	
+	//ADD A WEAR OUT FEATURE WHERE AFTER A CERTAIN AMOUNT OF USES THE AMBULANCE DISAPPEARS (BUT UPGRADE LEVELS AREN'T RESET)
+	
 	private String type;
 	
 	public Ambulance(String t){

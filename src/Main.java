@@ -2,7 +2,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.JPanel;
 
 public class Main extends JPanel{
@@ -318,6 +317,7 @@ public class Main extends JPanel{
 	//adds hospitals according to type (disease type)
 	public void addAmbulance(String type){
 		transmods.add(new Ambulance(type));
+		hospitals++;
 	}
 	
 	public void shield(boolean s){

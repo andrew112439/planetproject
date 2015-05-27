@@ -75,15 +75,12 @@ public class Run {
 		
 		controls.setResizable(false);
 		controls.setSize(400,60);
-		controls.setVisible(true);
 		controls.setTitle("Materials: " + m.getMaterials() + 
 				" | Energy: " + m.getEnergy());
 
 		//SETTING UP MAIN WINDOW
 		JFrame f = new JFrame();
-		f.setTitle(
-				" | Sick: " + m.getSick() + " | Population: " + m.getPopulation() + " | Collectors: " + m.getCollectors()
-				+ " | Miners: " + m.getMines() + " | Ambulances: " + m.getHospitals() + " | Buses: " + m.getBuses());
+		f.setTitle("Loading...");
 		f.setSize(700, 700);
 		f.setDefaultCloseOperation(3);
 		f.setResizable(false);
@@ -94,10 +91,12 @@ public class Run {
 		f.add(t);
 		f.setVisible(true); 
 		
-		Thread.sleep(5000); //MENU STAYS FOR FIVE SECONDS
+		Thread.sleep(2000); //MENU STAYS FOR TWO SECONDS
 		f.remove(t); //SWITCHES TO GAME AFTER MENU
 		f.add(m);
 		f.setVisible(true); 
+		
+		controls.setVisible(true);
 		
 		JFrame h = new JFrame();
 		h.setTitle("Plague: " + m.getBub() + " | Smallpox: " + m.getPox() + " | Malaria: " + m.getMal() + " | Fever: " + m.getYel());
@@ -113,7 +112,7 @@ public class Run {
 		yel.addActionListener(new Click());
 		yelUp = new JButton("Upgrade");
 		yelUp.addActionListener(new Click());
-		pox = new JButton("Small Pox");
+		pox = new JButton("Smallpox");
 		pox.addActionListener(new Click());
 		poxUp = new JButton("Upgrade");
 		poxUp.addActionListener(new Click());
@@ -146,12 +145,12 @@ public class Run {
 				break;
 			}
 			//updates hospital title
-			h.setTitle("Plague: " + m.getBub() + " | Smallpox: " + m.getPox() + " | Malaria: " + m.getMal() + " | Fever: " + m.getYel());
+			h.setTitle("Plague: " + m.getBub() + " | Fever: " + m.getYel() + " | Smallpox: " + m.getPox() + " | Malaria: " + m.getMal());
 			controls.setTitle("Materials: " + m.getMaterials() + 
 					" | Energy: " + m.getEnergy());
 			//updates main window title
 			f.setTitle( 
-					"Sick: " + m.getSick() + " | Population: " + m.getPopulation() + " | Collectors: " + m.getCollectors()
+					"Sick: " + (m.getSick()-100) + " | Population: " + m.getPopulation() + " | Collectors: " + m.getCollectors()
 					+ " | Miners: " + m.getMines() + " | Ambulances: " + m.getHospitals() + " | Buses: " + m.getBuses());
 			//spreading disease, gaining energy, gaining materials
 			if(counter % 1000 == 0){
