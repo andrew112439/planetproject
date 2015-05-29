@@ -15,7 +15,7 @@ public class Bus extends Collector{
 			if(initX == 350){
 				if(comingBack){
 					//ADDS TO POPULATION (IF THE BUS IS RETURNING WITH A 'LOAD' IT IS CARRYING PEOPLE)
-					Run.addPopulation(5);
+					Run.addPopulation(15);
 				}
 				return false;
 			}else{
