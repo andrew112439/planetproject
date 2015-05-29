@@ -9,11 +9,9 @@ class Click implements ActionListener{
 			//IF THE PLAYER HAS 60 ENERGY+60 MATERIALS A BUS IS PURCHASED
 			if(Run.getMain().getEnergy() >= 60 && Run.getMain().getMaterials() >= 60){
 				Run.getMain().addTransportModule("bus");
-				
 				//MAKE SURE TO REMOVE THE MATERIAL+ENERGY USED TO PURCHASE THE BUS
 				Run.getMain().addEnergy(-60);
 				Run.getMain().addMaterials(-60);
-				
 				Run.getMain().addBus();
 			}
 		}else if(e.getSource() == Run.getTransport()){
@@ -94,10 +92,13 @@ class Click implements ActionListener{
 		//DETERIMING THE DIFFICULTY OF THE GAME
 		else if(e.getSource() == Run.getEasy()){
 		    Run.setDifficulty(1);
+		    Run.getDifficultyFrame().dispose(); //CLOSE THE DIFFICULTY SELECTION WINDOW ONCE A DIFFICULTY IS PICKED
 		}else if(e.getSource() == Run.getMedium()){
 		    Run.setDifficulty(2);
+		    Run.getDifficultyFrame().dispose(); //CLOSE THE DIFFICULTY SELECTION WINDOW ONCE A DIFFICULTY IS PICKED
 		}else if(e.getSource() == Run.getHard()){
 		    Run.setDifficulty(3);
+		    Run.getDifficultyFrame().dispose(); //CLOSE THE DIFFICULTY SELECTION WINDOW ONCE A DIFFICULTY IS PICKED
 	    }
 	}
 }
