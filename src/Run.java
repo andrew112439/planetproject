@@ -6,18 +6,9 @@ import javax.swing.JPanel;
 
 public class Run {
 
-    /*
-     * CREATE GAME MODES:
-     *      EASY: CURRENT SETTING
-     *      MEDIUM: ASTEROIDS ARE MORE COMMON, ROBOTS COST MORE, GAME IS FAST
-     *      HARD: ASTEROIDS AND INVADERS ARE VERY COMMON, ROBOTS COST MORE, GAME IS VERY FAST
-     *
-     *  ADD UPGRADE SYSTEM FOR THE HOSPITALS SO THEY CAN CURE MORE PEOPLE AT ONCE
-     * 
-     *
-     */
-    
     private static boolean running = false;
+    
+    private static JFrame difficulty;
     
     private static JButton transport;
     private static JButton hospitals;
@@ -62,10 +53,10 @@ public class Run {
         Planet.setup();
 
         //GETTING DIFFICULTY
-        JFrame difficulty = new JFrame();
+        difficulty = new JFrame();
         difficulty.setTitle("Choose Difficulty");
         difficulty.setSize(160,200);
-        difficulty.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //THE PLAYER SHOULD BE ABLE TO CHANGE DIFFICULTY MIDGAME
+        difficulty.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //THE PLAYER SHOULD NOT BE ABLE TO CLOSE THE DIFFICULTY MENU BEFORE PICKING A DIFFICULTY
         
         JPanel diff = new JPanel();
         easy = new JButton("Easy");
@@ -338,5 +329,9 @@ public class Run {
     
     public static void setDifficulty(int diff){
         difficultyLevel = diff;
+    }
+    
+    public static JFrame getDifficultyFrame(){
+        return difficulty;
     }
 }
