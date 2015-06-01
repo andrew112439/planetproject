@@ -223,7 +223,7 @@ public class Run {
                 
                 //checks if a magnetic cloud should be added
                 int addCloud = r.nextInt(50);
-                if(addCloud <= (50-(50/(difficultyLevel+1))) && m.getCloudList().size() == 0){
+                if(addCloud <= (50-(50/(difficultyLevel+1))) && m.getCloudList().size() > 1){
                     m.addMagneticCloud(new MagneticCloud());
                 }
             }

@@ -4,17 +4,17 @@ import java.util.Random;
 
 public class Asteroid {
 
-	private static Color primary;
-	private static Color secondary;
+	protected static Color primary;
+	protected static Color secondary;
 
-	private static int[][] arr;
+	protected static int[][] arr;
 	
-	private static Random rand = new Random();
+	protected static Random rand = new Random();
 	
-	private int offset;
-	private boolean left;
+	protected int offset;
+	protected boolean left;
 	
-	private int yOffset;
+	protected int yOffset;
 	private int yMove;
 	private boolean up;
 	
