@@ -6,6 +6,17 @@ import javax.swing.JPanel;
 
 public class Run {
 
+    /*
+     * CREATE GAME MODES:
+     *      EASY: CURRENT SETTING
+     *      MEDIUM: ASTEROIDS ARE MORE COMMON, ROBOTS COST MORE, GAME IS FAST
+     *      HARD: ASTEROIDS AND INVADERS ARE VERY COMMON, ROBOTS COST MORE, GAME IS VERY FAST
+     *
+     *  ADD UPGRADE SYSTEM FOR THE HOSPITALS SO THEY CAN CURE MORE PEOPLE AT ONCE
+     * 
+     *
+     */
+    
     private static boolean running = false;
     
     private static JFrame difficulty;
@@ -14,6 +25,7 @@ public class Run {
     private static JButton hospitals;
     private static JButton mine;
     private static JButton bus;
+    private static JButton astro;
     
     private static JButton bub;
     private static JButton bubUp;
@@ -91,9 +103,12 @@ public class Run {
         bus = new JButton("Bus");
         bus.addActionListener(new Click());
         p.add(bus);
+        astro = new JButton("Astronaut");
+        astro.addActionListener(new Click());
+        p.add(astro);
         
         controls.setResizable(false);
-        controls.setSize(400,60);
+        controls.setSize(540,60);
         controls.setTitle("Materials: " + m.getMaterials() + 
                 " | Energy: " + m.getEnergy());
 
@@ -195,6 +210,7 @@ public class Run {
                 /*DIFFICULTY ALGORITHM
                  *  for an enemey to spawn the randomly generated number must be lower than or equal to 50-(50/(difficulty+1));
                  *      easy: <= 25, medium: <= 33, hard: <= 38 */
+                 //(50-(50/(difficultyLevel+1)))
                 if(addAsteroid <= (50-(50/(difficultyLevel+1))) && m.getAsteroidList().size() == 0){
                     m.addAsteroid(new Asteroid());
                 }
@@ -203,6 +219,12 @@ public class Run {
                 int invader = r.nextInt(50);
                 if(invader <= (50-(50/(difficultyLevel+1))) && m.getInvaderList().size() == 0){
                     m.addInvader(new Invader());
+                }
+                
+                //checks if a magnetic cloud should be added
+                int addCloud = r.nextInt(50);
+                if(addCloud <= (50-(50/(difficultyLevel+1))) && m.getCloudList().size() == 0){
+                    m.addMagneticCloud(new MagneticCloud());
                 }
             }
             Thread.sleep(10/(difficultyLevel));
@@ -333,5 +355,9 @@ public class Run {
     
     public static JFrame getDifficultyFrame(){
         return difficulty;
+    }
+    
+    public static JButton getAstro(){
+        return astro;
     }
 }
