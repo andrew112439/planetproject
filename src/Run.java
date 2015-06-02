@@ -168,7 +168,6 @@ public class Run {
 
         //GAME LOOP
         while(running){
-            System.out.println("Difficulty: " + difficultyLevel);
             if(m.getSick() < 10){ //ALL DISEASE CURED
                 f.setTitle("YOU WIN!");
                 running = false;
