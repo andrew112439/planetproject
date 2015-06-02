@@ -18,10 +18,10 @@ public class Astronaut extends TransportModule {
         setUpArr();
     }
     
-    //MOVES THE COLLECTOR AROUND THE SCREEN
+    //MOVES THE ASTRONAUT AROUND THE SCREEN
     public void move(){
         if(!isInBounds()){
-            //DETERMINES IF THE COLLECTOR SHOULD TURN AROUND
+            //DETERMINES IF THE ASTRONAUT SHOULD TURN AROUND
             left = !left;
             comingBack = !comingBack;
             out = !out;
@@ -67,6 +67,7 @@ public class Astronaut extends TransportModule {
          */
         
         //IMAGES CREATED USING REFERENCE TO GRAVONAUT DEVELOPED BY NEXUS GAMES STUDIOS
+        //DETERMINES WHICH IMAGE SHOULD BE USED FOR THE RETURNING AND OUTGOING ASTRONAUT BASED ON ITS ORIGINAL DIRECTION
         if(!left){
             int[][] astroO = {
                 {0,0,1,1,1,1,0,0},
