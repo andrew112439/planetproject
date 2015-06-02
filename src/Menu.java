@@ -16,14 +16,13 @@ public class Menu extends JPanel{
 	public void paint(Graphics g){
 		paintStars(g); //PAINTS THE STARRY BACKGROUND
 		
-		//USES THE LETTERLIST CLASS TO DRAW THE WORD "PLANETARY" (THE TITLE OF THE GAME)
+		//USES THE LETTERLIST CLASS TO DRAW THE WORD "LOADING"
 		LetterList.setup();
-		String alpha = "    PLANETARY";
+		String alpha = "     LOADING";
 		int offsetY = 32;
 		int offsetX = 8;
 		for(int i = 0; i < alpha.length(); i++){
-			String col = "" + rand.nextInt(99) + "00" + rand.nextInt(99);
-			g.setColor(new Color(Integer.parseInt(col)));
+			g.setColor(new Color(62007));
 			offsetY = 0;
 			System.out.println(alpha.substring(i, i+1));
 			if(alpha.substring(i, i+1).equals(" ")){
